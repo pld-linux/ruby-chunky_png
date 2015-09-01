@@ -7,7 +7,7 @@
 Summary:	Pure ruby library for read/write, chunk-level access to PNG files
 Name:		ruby-%{pkgname}
 Version:	1.2.7
-Release:	1
+Release:	2
 License:	MIT
 Group:		Development/Languages
 Source0:	http://rubygems.org/gems/%{pkgname}-%{version}.gem

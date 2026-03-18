@@ -1,0 +1,26 @@
+Fix the Vector parser for Ruby 3.4.
+
+The upstream code assumes the first element of an array input is either a
+Numeric or a String. When the parser is handed nested point arrays, the first
+element is itself an Array, so the old regexp check raised NoMethodError on
+Ruby 3.4. This keeps the original behavior for numeric strings and leaves
+point arrays on the existing fallback path.
+
+diff --git a/lib/chunky_png/vector.rb b/lib/chunky_png/vector.rb
+--- a/lib/chunky_png/vector.rb
++++ b/lib/chunky_png/vector.rb
+@@ -166,13 +166,13 @@
+     # @return [Array<ChunkyPNG::Point>] The list of points interpreted from the input array.
+     def self.multiple_from_array(source)
+       return [] if source.empty?
+-      if source.first.is_a?(Numeric) || source.first =~ /^\d+$/
++      if source.first.is_a?(Numeric) || (source.first.is_a?(String) && source.first =~ /^\d+$/)
+         raise ArgumentError, "The points array is expected to have an even number of items!" if source.length % 2 != 0
+ 
+         points = []
+         source.each_slice(2) { |x, y| points << ChunkyPNG::Point.new(x, y) }
+         return points
+       else
+         source.map { |p| ChunkyPNG::Point(p) }
+       end
+     end

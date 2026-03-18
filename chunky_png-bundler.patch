@@ -1,0 +1,11 @@
+Comment out Bundler setup in the spec helper so the test suite does not
+require the development-only Gemfile dependencies during packaging.
+
+diff --git a/spec/spec_helper.rb b/spec/spec_helper.rb
+--- a/spec/spec_helper.rb
++++ b/spec/spec_helper.rb
+@@ -1,4 +1,4 @@
+ require "rubygems"
+-require "bundler/setup"
++# require "bundler/setup"
+ require "chunky_png"
